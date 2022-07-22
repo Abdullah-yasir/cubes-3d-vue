@@ -4,6 +4,7 @@
 
 <script>
 import * as THREE from "three";
+import { OrbitControls } from "three/examples/jsm/controls/OrbitControls";
 
 export default {
   name: "VolexPainter",
@@ -17,10 +18,12 @@ export default {
       10000
     );
 
+    new OrbitControls(camera, renderer.domElement);
+
     const rollOverGeo = new THREE.BoxGeometry(50, 50, 50);
     const rollOverMaterial = new THREE.MeshBasicMaterial({
       color: 0xff0000,
-      opacity: 0.5,
+      opacity: 1,
       transparent: true,
     });
 
@@ -73,7 +76,6 @@ export default {
       objects: [],
       renderer,
       isShiftDown: false,
-      cursor: { x: 0, y: 0 },
     };
   },
   methods: {
@@ -102,16 +104,6 @@ export default {
     },
     onMouseMove(e) {
       e.preventDefault();
-
-      this.cursor.x = e.clientX / window.innerWidth - 0.5;
-      this.cursor.y = e.clientY / window.innerHeight - 0.5;
-
-      // console.log(this.cursor.x, this.cursor.y);
-
-      this.camera.position.x = this.cursor.x * 500;
-      this.camera.lookAt(new THREE.Vector3());
-      // this.camera.position.y = this.cursor.y * 100;
-      // this.camera.position.z = this.cursor.x + this.cursor.y;
 
       this.mouse.set(
         (e.clientX / window.innerWidth) * 2 - 1,
