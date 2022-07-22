@@ -73,6 +73,7 @@ export default {
       objects: [],
       renderer,
       isShiftDown: false,
+      cursor: { x: 0, y: 0 },
     };
   },
   methods: {
@@ -101,6 +102,16 @@ export default {
     },
     onMouseMove(e) {
       e.preventDefault();
+
+      this.cursor.x = e.clientX / window.innerWidth - 0.5;
+      this.cursor.y = e.clientY / window.innerHeight - 0.5;
+
+      // console.log(this.cursor.x, this.cursor.y);
+
+      this.camera.position.x = this.cursor.x * 500;
+      this.camera.lookAt(new THREE.Vector3());
+      // this.camera.position.y = this.cursor.y * 100;
+      // this.camera.position.z = this.cursor.x + this.cursor.y;
 
       this.mouse.set(
         (e.clientX / window.innerWidth) * 2 - 1,
@@ -154,6 +165,7 @@ export default {
         } else {
           const voxel = new THREE.Mesh(this.cubeGeo, this.cubeMaterial);
           voxel.position.copy(intersect.point).add(intersect.face.normal);
+          console.log(intersect.point);
           voxel.position
             .divideScalar(50)
             .floor()
