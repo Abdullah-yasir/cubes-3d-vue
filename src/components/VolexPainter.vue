@@ -74,6 +74,38 @@ export default {
       ambientLight,
       directionalLight,
       objects: [],
+      vectors: [
+        {
+          x: -2.4915689024920766,
+          y: 19.599681395701168,
+          z: 0,
+        },
+        {
+          x: 168.45821711558273,
+          y: -153.19644522758358,
+          z: 0,
+        },
+        {
+          x: 173.67590004661594,
+          y: 27.122338948066727,
+          z: 0,
+        },
+        {
+          x: 274.5690537943176,
+          y: 253.04768248427763,
+          z: 0,
+        },
+        {
+          x: 270.32063962829824,
+          y: -118.44841976291195,
+          z: 0,
+        },
+        {
+          x: 252.64073182599344,
+          y: -268.3345584644135,
+          z: 0,
+        },
+      ],
       renderer,
       isShiftDown: false,
     };
@@ -121,6 +153,7 @@ export default {
         this.rollOverMesh.position
           .copy(intersect.point)
           .add(intersect.face.normal);
+
         this.rollOverMesh.position
           .divideScalar(50)
           .floor()
@@ -158,12 +191,13 @@ export default {
         } else {
           const voxel = new THREE.Mesh(this.cubeGeo, this.cubeMaterial);
           voxel.position.copy(intersect.point).add(intersect.face.normal);
-          console.log(intersect.point);
+
           voxel.position
             .divideScalar(50)
             .floor()
             .multiplyScalar(50)
             .addScalar(25);
+
           this.scene.add(voxel);
 
           this.objects.push(voxel);
