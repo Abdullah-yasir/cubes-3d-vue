@@ -8,6 +8,7 @@ import * as THREE from "three";
 export default {
   name: "VolexPainter",
   data() {
+    const renderer = new THREE.WebGLRenderer({ antialias: true });
     const scene = new THREE.Scene();
     const camera = new THREE.PerspectiveCamera(
       45,
@@ -54,7 +55,6 @@ export default {
 
     const directionalLight = new THREE.DirectionalLight(0xffffff);
 
-    const renderer = new THREE.WebGLRenderer({ antialias: true });
     return {
       scene,
       camera,
