@@ -81,6 +81,7 @@ export default {
   methods: {
     render() {
       this.renderer.render(this.scene, this.camera);
+      requestAnimationFrame(this.render);
     },
     createPlane() {
       const points = [];
@@ -195,7 +196,7 @@ export default {
 
     this.scene.add(this.line);
 
-    // this.bufferGeo.rotateX(-Math.PI / 2);
+    this.bufferGeo.rotateX(-Math.PI / 2);
 
     this.scene.add(this.plane);
 
