@@ -20,15 +20,6 @@ export default {
 
     new OrbitControls(camera, renderer.domElement);
 
-    const rollOverGeo = new THREE.BoxGeometry(50, 50, 50);
-    const rollOverMaterial = new THREE.MeshBasicMaterial({
-      color: 0xff0000,
-      opacity: 1,
-      transparent: true,
-    });
-
-    const rollOverMesh = new THREE.Mesh(rollOverGeo, rollOverMaterial);
-
     const cubeGeo = new THREE.BoxGeometry(50, 50, 50);
     const cubeMaterial = new THREE.MeshLambertMaterial({
       color: 0xfeb74c,
@@ -62,9 +53,6 @@ export default {
       scene,
       camera,
       bufferGeo,
-      rollOverGeo,
-      rollOverMaterial,
-      rollOverMesh,
       cubeGeo,
       cubeMaterial,
       line,
@@ -129,69 +117,18 @@ export default {
 
       this.bufferGeo.setFromPoints(points);
     },
-    onWindowResize() {
-      this.camera.aspect = window.innerWidth / window.innerHeight;
-      this.camera.updateProjectionMatrix();
-
-      this.renderer.setSize(window.innerWidth, window.innerHeight);
-    },
-    onMouseMove(e) {
-      e.preventDefault();
-
-      this.mouse.set(
-        (e.clientX / window.innerWidth) * 2 - 1,
-        -(e.clientY / window.innerHeight) * 2 + 1
-      );
-
-      this.raycaster.setFromCamera(this.mouse, this.camera);
-
+    renderBoxes() {
       var intersects = this.raycaster.intersectObjects(this.objects);
 
       if (intersects.length > 0) {
         var intersect = intersects[0];
 
-        this.rollOverMesh.position
-          .copy(intersect.point)
-          .add(intersect.face.normal);
+        const voxel = new THREE.Mesh(this.cubeGeo, this.cubeMaterial);
+        voxel.position.copy(intersect.point).add(intersect.face.normal);
 
-        this.rollOverMesh.position
-          .divideScalar(50)
-          .floor()
-          .multiplyScalar(50)
-          .addScalar(25);
-      }
-
-      this.render();
-    },
-    onMouseDown(e) {
-      e.preventDefault();
-
-      this.mouse.set(
-        (e.clientX / window.innerWidth) * 2 - 1,
-        -(e.clientY / window.innerHeight) * 2 + 1
-      );
-
-      this.raycaster.setFromCamera(this.mouse, this.camera);
-
-      var intersects = this.raycaster.intersectObjects(this.objects);
-
-      if (intersects.length > 0) {
-        var intersect = intersects[0];
-
-        // delete cube
-
-        if (this.isShiftDown) {
-          if (intersect.object != this.plane) {
-            this.scene.remove(intersect.object);
-
-            this.objects.splice(this.objects.indexOf(intersect.object), 1);
-          }
-
-          // create cube
-        } else {
+        this.vectors.forEach((vec) => {
           const voxel = new THREE.Mesh(this.cubeGeo, this.cubeMaterial);
-          voxel.position.copy(intersect.point).add(intersect.face.normal);
-
+          voxel.position.copy(vec).add(intersect.face.normal);
           voxel.position
             .divideScalar(50)
             .floor()
@@ -201,30 +138,31 @@ export default {
           this.scene.add(voxel);
 
           this.objects.push(voxel);
-        }
+        });
+
+        voxel.position
+          .divideScalar(50)
+          .floor()
+          .multiplyScalar(50)
+          .addScalar(25);
+
+        this.scene.add(voxel);
+
+        this.objects.push(voxel);
 
         this.render();
       }
     },
-    onKeyDown(e) {
-      switch (e.keyCode) {
-        case 16:
-          this.isShiftDown = true;
-          break;
-      }
-    },
-    onKeyUp(e) {
-      switch (e.keyCode) {
-        case 16:
-          this.isShiftDown = false;
-          break;
-      }
+    onWindowResize() {
+      this.camera.aspect = window.innerWidth / window.innerHeight;
+      this.camera.updateProjectionMatrix();
+
+      this.renderer.setSize(window.innerWidth, window.innerHeight);
     },
   },
   created() {
     this.camera.position.set(500, 800, 1300);
     this.camera.lookAt(new THREE.Vector3());
-    this.scene.add(this.rollOverMesh);
 
     this.createPlane();
 
@@ -246,19 +184,7 @@ export default {
   },
   mounted() {
     this.$refs.container.appendChild(this.renderer.domElement);
-
-    window.addEventListener("mousemove", this.onMouseMove, false);
-    window.addEventListener("mousedown", this.onMouseDown, false);
-    window.addEventListener("keydown", this.onKeyDown, false);
-    window.addEventListener("keyup", this.onKeyUp, false);
-    window.addEventListener("resize", this.onWindowResize, false);
-  },
-  unmounted() {
-    window.removeEventListener("mousemove", this.onMouseMove);
-    window.removeEventListener("mousedown", this.onMouseDown);
-    window.removeEventListener("keydown", this.onKeyDown);
-    window.removeEventListener("keyup", this.onKeyUp);
-    window.removeEventListener("resize", this.onWindowResize);
+    this.renderBoxes();
   },
 };
 </script>
