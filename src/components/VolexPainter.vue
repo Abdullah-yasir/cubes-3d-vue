@@ -61,6 +61,7 @@ export default {
       plane,
       ambientLight,
       directionalLight,
+      renderer,
       objects: [],
       vectors: [
         {
@@ -94,8 +95,6 @@ export default {
           z: 0,
         },
       ],
-      renderer,
-      isShiftDown: false,
     };
   },
   methods: {
