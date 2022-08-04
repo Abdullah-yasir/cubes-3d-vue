@@ -140,17 +140,17 @@ export default {
 
         this.boxes.forEach(({ vector: vec, sizes }) => {
           const cubeGeo = new THREE.BoxGeometry(...sizes);
-          const voxel = new THREE.Mesh(cubeGeo, this.cubeMaterial);
-          voxel.position.copy(vec).add(intersect.face.normal);
-          voxel.position
-            .divideScalar(50)
+          const box = new THREE.Mesh(cubeGeo, this.cubeMaterial);
+          box.position.copy(vec).add(intersect.face.normal);
+          box.position
+            .divideScalar(sizes[2])
             .floor()
-            .multiplyScalar(50)
-            .addScalar(25);
+            .multiplyScalar(sizes[2])
+            .addScalar(sizes[2] / 2);
 
-          this.scene.add(voxel);
+          this.scene.add(box);
 
-          this.objects.push(voxel);
+          this.objects.push(box);
         });
 
         this.render();
