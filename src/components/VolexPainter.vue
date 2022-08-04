@@ -35,7 +35,6 @@ export default {
     const line = new THREE.LineSegments(bufferGeo, lineMaterial);
 
     const raycaster = new THREE.Raycaster();
-    const mouse = new THREE.Vector2();
 
     const planeBufferGeo = new THREE.PlaneBufferGeometry(1000, 1000);
 
@@ -55,7 +54,6 @@ export default {
       cubeMaterial,
       line,
       raycaster,
-      mouse,
       plane,
       ambientLight,
       directionalLight,
