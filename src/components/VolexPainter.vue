@@ -131,10 +131,10 @@ export default {
       this.bufferGeo.setFromPoints(points);
     },
     renderBoxes() {
-      var intersects = this.raycaster.intersectObjects(this.objects);
+      let intersects = this.raycaster.intersectObjects(this.objects);
 
       if (intersects.length > 0) {
-        var intersect = intersects[0];
+        let intersect = intersects[0];
 
         this.boxes.forEach(({ vector: vec, sizes }) => {
           const cubeGeo = new THREE.BoxGeometry(...sizes);
