@@ -162,7 +162,11 @@ export default {
     },
   },
   created() {
-    this.camera.position.set(500, 800, 1300);
+    this.camera.position.set(
+      -8.712355391925911,
+      -1351.2523894806152,
+      868.3553850736749
+    );
     this.camera.lookAt(new THREE.Vector3());
 
     this.createPlane();
